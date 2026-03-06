@@ -1,0 +1,451 @@
+<x-interno-layout :breadcrumb="[
+   [
+    'name' => 'Dashboard',
+    'url' => route('interno.dashboard.index')
+   ],
+   [
+    'name' => 'Autorizaciones'
+   ]
+]">
+
+
+@livewire('autorizaciones-table')
+
+
+ <!-- modal para ver acciones -->
+
+    <div
+
+
+        
+
+    x-data="{
+        open: false,
+        solicitud: {},
+        openPorAutorizar: false,
+        openRechazoEmision: false,
+        errorRechazo: null,
+                descripcion: '',
+
+    }"
+
+    {{-- modal de rechazado --}}
+    x-on:error-rechazo.window="
+    errorRechazo = $event.detail.mensaje
+    "
+
+
+    x-on:rechazo-exitoso.window="
+        openRechazoEmision = false;
+        open = false;
+        descripcion = '';
+        errorRechazo = null;
+    "
+
+
+    x-on:solicitud-autorizada.window="
+        openPorAutorizar = false;
+        open = false;
+    "
+
+    @open-modal-detalle.window="
+        open = true;
+        solicitud = $event.detail.solicitud
+    "
+
+    x-show="open"
+    x-cloak
+    class="fixed inset-0 z-50 overflow-y-auto"
+    aria-labelledby="modal-title"
+    role="dialog"
+    aria-modal="true"
+>
+
+
+
+
+
+
+
+<div x-show="open"
+     x-transition:enter="ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity z-50"
+     @click="open = true">
+</div>
+
+<div x-show="open"
+     class="fixed inset-0 z-50 overflow-y-auto">
+
+      <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-sm transition-opacity"
+         @click="open = false">
+     </div>
+
+     
+
+    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+
+        <div x-show="open"
+             x-cloak
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
+
+            <div class="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white leading-tight">
+                            Detalle de Solicitud
+                        </h3>
+                        <p class="text-blue-100 text-sm font-medium">No. <span x-text="solicitud.no_solicitud"></span></p>
+                    </div>
+                </div>
+
+                <button @click="open = false" type="button" class="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                            <span class="text-blue-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></span>
+                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-widest">Información del Solicitante</h4>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Nombre Completo</label>
+                                <p class="text-gray-900 font-semibold" x-text="solicitud.nombres + ' ' + (solicitud.apellidos || '')"></p>
+                            </div>
+
+                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">DPI / CUI</label>
+                                <p class="text-gray-900 font-mono" x-text="solicitud.cui"></p>
+                            </div>
+
+                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Teléfono</label>
+                                <p class="text-gray-900" x-text="solicitud.telefono"></p>
+                            </div>
+
+                            <div class="sm:col-span-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Correo Electrónico</label>
+                                <p class="text-gray-900 truncate" x-text="solicitud.email"></p>
+                            </div>
+
+                            <div class="sm:col-span-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Domicilio / Zona</label>
+                                <p class="text-gray-900 text-sm">
+                                    <span x-text="solicitud.domicilio"></span> - <span class="font-bold text-blue-600" x-text="'Zona ' + (solicitud.zona?.nombre || '')"></span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-xl border border-blue-100">
+                            <span class="text-xs font-bold text-blue-700 uppercase">Tipo de Trámite</span>
+                            <span class="px-3 py-1 bg-blue-600 text-white text-[10px] font-black rounded-full shadow-sm uppercase" x-text="solicitud.requisitos_tramites?.[0]?.tramite?.nombre || 'General'"></span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                            <span class="text-green-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></span>
+                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-widest">Historial de Movimientos</h4>
+                        </div>
+
+                        <div class="max-h-[300px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                            <template x-if="solicitud.bitacoras && solicitud.bitacoras.length > 0">
+                                <template x-for="item in solicitud.bitacoras" :key="item.id">
+                                    <div class="relative pl-4 border-l-2 border-blue-200 py-1">
+                                        <div class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
+                                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <span class="text-xs font-bold text-gray-900 uppercase" x-text="item.evento"></span>
+                                                <span class="text-[10px] text-gray-400 font-medium" x-text="item.fecha_formateada"></span>
+                                            </div>
+                                            <p class="text-xs text-gray-600 italic" x-text="item.descripcion"></p>
+                                            <p class="text-[10px] mt-2 font-bold text-blue-500 uppercase tracking-tighter" x-text="'Por: ' + (item.user?.name || 'Sistema')"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+
+                            <template x-if="!solicitud.bitacoras || solicitud.bitacoras.length === 0">
+                                <div class="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                                    <p class="text-xs font-bold text-gray-400">Sin movimientos registrados</p>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-2xl p-4 shadow-inner">
+                            <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Personas Dependientes</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-if="solicitud.dependientes && solicitud.dependientes.length > 0">
+                                    <template x-for="dep in solicitud.dependientes" :key="dep.id">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-lg bg-gray-800 text-green-400 text-xs border border-gray-700">
+                                            <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
+                                            <span x-text="dep.nombres + ' ' + (dep.apellidos || '')"></span>
+                                        </span>
+                                    </template>
+                                </template>
+                                <template x-if="!solicitud.dependientes || solicitud.dependientes.length === 0">
+                                <span class="text-[11px] text-orange-400/80 italic flex items-center gap-1.5">
+                                                        <i class="fas fa-info-circle"></i> No se ingresaron dependientes
+                                                    </span>                                
+                                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mt-3 bg-gray-50 p-3.5 rounded-xl border border-gray-100">
+                                <label class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">
+                                    Observaciones
+                                </label>
+
+                                <p class="text-gray-900 font-mono font-medium"
+                                x-text="solicitud.observaciones ? solicitud.observaciones : 'El solicitante no ingresó observaciones'">
+                                </p>
+                    </div>
+                    
+
+                <div class="mt-10 flex flex-col sm:flex-row items-center justify-end gap-3 pt-6 border-t border-gray-100">
+
+                    <button type="button"
+                        @click="openRechazoEmision = true"
+                        x-show="solicitud.estado?.nombre === 'Emitido'"
+                        class="w-full md:w-auto inline-flex items-center justify-center rounded-xl bg-red-50 px-6 py-3.5 text-sm font-black text-red-600 border border-red-100 hover:bg-red-600 hover:text-white transition-all transform active:scale-95 group">
+                        
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        
+                        NO AUTORIZAR
+                    </button>
+
+                     
+                    <button
+                        type="button"
+                        x-show="solicitud.estado?.nombre === 'Emitido'""
+                        @click="openPorAutorizar = true"
+                        class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl
+                            bg-[#22C55E] hover:bg-[#16a34a]
+                            px-10 py-3 text-sm font-bold text-white
+                            shadow-lg shadow-green-200
+                            transition-all transform active:scale-95">
+                        
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        
+                        Autorizar Solicitud
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+   <!-- MODAL DE COMPLETAR LA SOLICITUD -->
+   
+  <div x-show="openPorAutorizar"
+     x-cloak
+     class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm"
+         @click="openPorAutorizar = false">
+    </div>
+
+    <div x-show="openPorAutorizar"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-0 relative overflow-hidden">
+
+        <div class="h-2 w-full" style="background-color:#22C55E;"></div>
+
+        <div class="p-6">
+            <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                   <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+                        style="background-color:#DCFCE7;">
+                        <svg class="h-6 w-6" style="color:#22C55E" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">
+                            Autorizar Solicitud
+                        </h3>
+                        <p class="text-sm text-gray-500 leading-tight">Validación final de firmas</p>
+                    </div>
+                </div>
+
+                <button @click="openPorAutorizar = false"
+                        class="text-gray-400 hover:text-gray-600 transition-colors p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="mt-5">
+                <p class="text-gray-700 text-base leading-relaxed">
+                    ¿Esta seguro que desea autorizar la solicitud
+                    <span class="font-bold text-[#22C55E]" x-text="'#' + solicitud.no_solicitud"></span> 
+                    ?
+                </p>
+                
+                <div class="mt-4 bg-green-50 border-l-4 border-[#22C55E] p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0  00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-xs text-green-800 leading-snug">
+                                Al confirmar, el estado cambiará a <strong>"Autorizado"</strong>. Esta acción certifica que el proceso de firmas ha concluido y la solicitud está lista para entregarse.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8">
+                <button @click="openPorAutorizar = false"
+                        class="px-5 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all order-2 sm:order-1">
+                    Cancelar
+                </button>
+
+                <button @click="Livewire.dispatch('peticionAutorizada', { id: solicitud.id }); openPorAutorizar = false;"
+                        class="px-6 py-2.5 text-sm font-bold text-white bg-[#22C55E] hover:bg-[#16a34a] rounded-xl shadow-lg shadow-green-200 transition-all transform active:scale-95 order-1 sm:order-2">
+                    Confirmar Autorización
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- modal de rechazo -->
+
+<div 
+    x-show="openRechazoEmision" 
+    x-cloak 
+    class="fixed inset-0 z-[100] flex items-center justify-center p-4"
+>
+    <div 
+        x-show="openRechazoEmision"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm" 
+        @click="openRechazoEmision = false"
+    ></div>
+
+    <div 
+        x-show="openRechazoEmision"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-0 relative overflow-hidden"
+    >
+        <div class="h-2 bg-red-500 w-full"></div>
+
+        <div class="p-6">
+
+            <div class="flex items-start justify-between">
+
+                <div class="flex items-center gap-3">
+                    <div class="relative flex items-center justify-center w-12 h-12">
+                        <div class="absolute inset-0 bg-red-500 rounded-full opacity-20 animate-pulse"></div>
+                        <div class="relative w-10 h-10 bg-red-500 rounded-full flex items-center justify-center shadow-lg shadow-red-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">No autorizar</h3>
+                        <p class="text-sm text-gray-500 leading-tight">Esta acción no se puede deshacer</p>
+                    </div>
+                </div>
+
+
+                  <button @click="openRechazoEmision = false"
+                        class="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+            </div>
+
+
+
+              <div class="mt-5">
+                <p class="text-gray-700 text-base">
+                    ¿Está seguro que desea no autorizar la solicitud <span class="font-bold text-[#3B82F6]" x-text="solicitud.no_solicitud"></span>?
+                </p>
+
+                <div x-show="errorRechazo" x-cloak
+                     class="mt-3 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                    <span x-text="errorRechazo"></span>
+                </div>
+
+                <div class="mt-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1 ml-1">
+                        Motivo del rechazo <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        x-model="descripcion"
+                        rows="4"
+                        class="w-full border-gray-200 rounded-xl p-3 text-sm focus:border-red-500 focus:ring focus:ring-red-100 transition-all resize-none bg-gray-50"
+                        placeholder="Describa por qué no se autoriza la solicitud...">
+                    </textarea>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8">
+                <button @click="openRechazoEmision = false"
+                        class="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all order-2 sm:order-1">
+                    No, cancelar
+                </button>
+
+                <button @click="openRechazoEmision = null; Livewire.dispatch('peticionRechazar', { id: solicitud.id, descripcion: descripcion });"
+                        class="w-full sm:w-auto px-6 py-2.5 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-lg shadow-red-200 transition-all transform active:scale-95 order-1 sm:order-2">
+                    Confirmar rechazo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+   </div>
+</x-interno-layout>
