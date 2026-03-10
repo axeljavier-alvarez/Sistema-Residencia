@@ -606,9 +606,10 @@ x-on:constancia-generada.window="
                                     <span class="font-bold text-gray-700" x-text="detalle.requisito_tramite?.requisito?.nombre || 'Documento'"></span>
                                     <span class="text-[10px] uppercase text-gray-400 font-semibold" x-text="detalle.tipo"></span>
                                 </div>
-                                <a :href="'/storage/' + detalle.path" target="_blank" class="inline-flex items-center px-3 py-1 bg-emerald-600 text-white rounded-md text-xs font-bold hover:bg-emerald-700">
-                                    Ver Archivo
-                                </a>
+                          <a :href="'{{ asset('storage') }}/' + detalle.path" target="_blank"
+   class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
+    Ver Archivo
+</a>
                             </div>
                         </template>
                     </div>
