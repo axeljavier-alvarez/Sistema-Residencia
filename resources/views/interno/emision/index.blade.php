@@ -31,7 +31,7 @@
     hasTipo(tipo) {
             return this.solicitud?.detalles?.some(d => d.tipo === tipo);
         }
-    
+
 }"
 
 
@@ -63,10 +63,10 @@ x-on:constancia-generada.window="
         // Creamos un elemento 'a' invisible
         const link = document.createElement('a');
         link.href = '/storage/' + constanciaFile;
-        
+
         // El atributo 'download' fuerza la descarga
         link.download = solicitud.no_solicitud + '-constancia.pdf';
-        
+
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -77,7 +77,7 @@ x-on:constancia-generada.window="
   @open-modal-detalle.window="
     open = true;
     solicitud = $event.detail.solicitud;
-    constanciaGenerada = solicitud.constancia_generada === true; 
+    constanciaGenerada = solicitud.constancia_generada === true;
     {{-- puedo dejarlo en null para mientras --}}
      constanciaFile = solicitud.constancia_path ?? null;
 "
@@ -89,24 +89,24 @@ x-on:constancia-generada.window="
     aria-modal="true"
 >
 
-   
 
 
-<div 
-    x-show="openRechazoEmision" 
-    x-cloak 
+
+<div
+    x-show="openRechazoEmision"
+    x-cloak
     class="fixed inset-0 z-[100] flex items-center justify-center p-4"
 >
-    <div 
+    <div
         x-show="openRechazoEmision"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
-        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm" 
+        class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"
         @click="openRechazoEmision = false"
     ></div>
 
-    <div 
+    <div
         x-show="openRechazoEmision"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 scale-95"
@@ -247,7 +247,7 @@ x-on:constancia-generada.window="
 
 
 
-                    
+
                     <div>
                         <h3 class="text-xl font-bold text-gray-900">
                             Emitir Constancia
@@ -335,16 +335,16 @@ x-on:constancia-generada.window="
 
 
 
-<div x-show="open" 
-     x-transition:enter="ease-out duration-300" 
-     x-transition:enter-start="opacity-0" 
-     x-transition:enter-end="opacity-100" 
-     class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity z-50" 
+<div x-show="open"
+     x-transition:enter="ease-out duration-300"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity z-50"
      @click="open = true">
-     
+
 </div>
 
-<div x-show="open" 
+<div x-show="open"
      class="fixed inset-0 z-50 overflow-y-auto">
 
 
@@ -354,14 +354,14 @@ x-on:constancia-generada.window="
 
 
     <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-        
+
         <div x-show="open"
              x-cloak
              x-transition:enter="ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
              class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
-            
+
             <div class="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="bg-white/20 p-2 rounded-lg">
@@ -384,7 +384,7 @@ x-on:constancia-generada.window="
 
             <div class="p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    
+
                     <div class="space-y-6">
                         <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
                             <span class="text-blue-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></span>
@@ -470,13 +470,13 @@ x-on:constancia-generada.window="
                                 <template x-if="!solicitud.dependientes || solicitud.dependientes.length === 0">
                                 <span class="text-[11px] text-orange-400/80 italic flex items-center gap-1.5">
                                                         <i class="fas fa-info-circle"></i> No se ingresaron dependientes
-                                                    </span>                                
+                                                    </span>
                                                 </template>
                             </div>
                         </div>
 
 
-                        
+
                     </div>
                 </div>
 
@@ -490,18 +490,18 @@ x-on:constancia-generada.window="
                                 x-text="solicitud.observaciones ? solicitud.observaciones : 'El solicitante no ingresó observaciones'">
                                 </p>
                     </div>
-                    
+
 
                 <div class="mt-10 flex flex-col sm:flex-row items-center justify-end gap-3 pt-6 border-t border-gray-100">
-                  <button type="button" 
+                  <button type="button"
                         @click="openRechazoEmision = true"
                         x-show="solicitud.estado?.nombre === 'Por autorizar'"
                         class="w-full md:w-auto inline-flex items-center justify-center rounded-xl bg-red-50 px-6 py-3.5 text-sm font-black text-red-600 border border-red-100 hover:bg-red-600 hover:text-white transition-all transform active:scale-95 group">
-                        
+
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        
+
                         RECHAZAR
                     </button>
 
@@ -529,16 +529,16 @@ x-on:constancia-generada.window="
                     EMITIR CONSTANCIA
                 </button>
 
-                                        
-              
+
+
                 </div>
 
 
                 <!-- aca mostrare los documentos de la persona -->
-                <button 
+                <button
                 x-show="solicitud.estado?.nombre === 'Emitido'"
                 x-transition
-                    @click="showDocs = !showDocs" 
+                    @click="showDocs = !showDocs"
                     class="flex items-center justify-between w-full p-4 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200"
                 >
                     <div class="flex items-center gap-3">
@@ -547,27 +547,27 @@ x-on:constancia-generada.window="
                         </svg>
                         <span class="text-lg font-bold text-gray-800">Documentación de la solicitud</span>
                     </div>
-                    
-                    <svg 
-                        class="w-5 h-5 text-gray-500 transition-transform duration-300" 
-                        :class="showDocs ? 'rotate-180' : ''" 
+
+                    <svg
+                        class="w-5 h-5 text-gray-500 transition-transform duration-300"
+                        :class="showDocs ? 'rotate-180' : ''"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor"
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
 
-                
 
-    <div 
-        x-show="showDocs" 
-        x-collapse 
+
+    <div
+        x-show="showDocs"
+        x-collapse
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0 transform scale-95"
         x-transition:enter-end="opacity-100 transform scale-100"
         class="mt-4 space-y-6"
     >
-        
+
         <div x-show="constanciaGenerada && solicitud.estado?.nombre === 'Emitido'" class="w-full">
             <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
                 <div class="flex items-center gap-2 mb-4">
@@ -596,11 +596,11 @@ x-on:constancia-generada.window="
                 <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
                     <h4 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        Documentos 
+                        Documentos
                     </h4>
                     <div class="space-y-3">
                         <template x-for="detalle in solicitud.detalles" :key="detalle.id">
-                            <div x-show="detalle.tipo === 'normal' || detalle.tipo === 'carga'" 
+                            <div x-show="detalle.tipo === 'normal' || detalle.tipo === 'carga'"
                                  class="flex justify-between items-center text-sm border bg-white p-3 rounded-lg shadow-sm hover:border-emerald-400 transition-colors">
                                 <div class="flex flex-col">
                                     <span class="font-bold text-gray-700" x-text="detalle.requisito_tramite?.requisito?.nombre || 'Documento'"></span>
@@ -632,34 +632,34 @@ x-on:constancia-generada.window="
 
                     <div class="space-y-3">
 
-                        <template x-if="solicitud.detalles.some(d => d.tipo === 'carga')">
+                        <template x-if="solicitud.detalles?.some(d => d.tipo === 'carga')">
 
                             <div>
 
                                 <template x-for="detalle in solicitud.detalles" :key="detalle.id">
 
-                                    <div x-show="detalle.tipo === 'carga'" 
+                                    <div x-show="detalle.tipo === 'carga'"
 
                                         class="flex justify-between items-center text-sm border bg-white p-3 rounded-lg shadow-sm hover:border-blue-400 transition-colors mb-3 last:mb-0">
 
-                                        
+
 
                                         <div class="flex flex-col">
                                             <span class="font-bold text-gray-700"
-                                            x-text="detalle.dependiente 
-                                                    ? detalle.dependiente.nombres + ' ' + (detalle.dependiente.apellidos || '') 
+                                            x-text="detalle.dependiente
+                                                    ? detalle.dependiente.nombres + ' ' + (detalle.dependiente.apellidos || '')
                                                     : 'Dependiente'">
                                             </span>
 
-                                            
+
 
                                             <span class="text-[10px] uppercase text-blue-500 font-semibold">Carga Familiar</span>
 
                                         </div>
 
-                                        
 
-                                        <a :href="'/storage/' + detalle.path" target="_blank" 
+
+                                        <a :href="'/storage/' + detalle.path" target="_blank"
 
                                         class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
 
@@ -677,7 +677,7 @@ x-on:constancia-generada.window="
 
 
 
-                        <template x-if="!solicitud.detalles.some(d => d.tipo === 'carga')">
+                        <template x-if="!solicitud.detalles?.some(d => d.tipo === 'carga')">
 
                             <div class="flex flex-col items-center justify-center py-8 text-blue-400 border-2 border-dashed border-blue-100 rounded-lg">
 
@@ -697,7 +697,7 @@ x-on:constancia-generada.window="
 
                 </div>
 
-                
+
 
 
 
@@ -721,11 +721,11 @@ x-on:constancia-generada.window="
 
                                                 <div x-show="detalle.tipo === 'foto_visita'" class="group relative">
 
-                                                    <img :src="'/storage/' + detalle.path" 
+                                                    <img :src="'/storage/' + detalle.path"
 
                                                         class="w-full h-32 object-cover rounded-lg border-2 border-white shadow-md">
 
-                                                    <a :href="'/storage/' + detalle.path" target="_blank" 
+                                                    <a :href="'/storage/' + detalle.path" target="_blank"
 
                                                     class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg text-white text-xs font-bold">
 
@@ -764,11 +764,11 @@ x-on:constancia-generada.window="
                     </div>
 
 
-                    
+
             </div>
         </template>
     </div>
 
-   
+
 
 </x-interno-layout>
