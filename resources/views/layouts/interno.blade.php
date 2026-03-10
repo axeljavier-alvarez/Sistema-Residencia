@@ -33,7 +33,7 @@
         @livewireStyles
 
 
-        
+
 </head>
 
 <body
@@ -78,8 +78,11 @@ x-on:click="open = false"
 
 @stack('modals')
 
-        @livewireScripts
+        @stack('modals')
 
+        <script src="{{ asset('vendor/rappasoft/livewire-tables/js/laravel-livewire-tables.min.js') }}"></script>
+
+        @livewireScripts(['asset_url' => '/ConstanciaResidencia/public'])
 
         @stack('js')
 </body>

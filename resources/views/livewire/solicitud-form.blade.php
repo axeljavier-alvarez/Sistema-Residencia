@@ -426,39 +426,38 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                 <x-label class="mb-1 font-bold text-[#03192B]">Teléfono</x-label>
                 <x-input type="number" placeholder="Ingresa tu número telefónico" wire:model.defer="telefono" class="placeholder-[#797775] border rounded px-3 py-2 w-full" />
             </div> --}}
-            <div class="col-span-1 md:col-span-1" x-data="{ valor: ''}" x-on:form-reset.window="valor = ''" x-init="
-                const input = document.querySelector('#telefono');
-                const iti = window.intlTelInput(input, {
-                    {{-- initialCountry: 'gt', --}}
-                    onlyCountries: ['gt'],
-                    separateDialCode: true,
-                    {{-- preferredCountries: ['gt', 'mx', 'us', 'sv', 'hn'], --}}
-                });
 
-                $wire.set('codigo_pais', iti.getSelectedCountryData().dialCode);
+            <div x-data="{ valor: '' }" x-on:form-reset.window="valor = ''">
 
-                input.addEventListener('countrychange', () => {
-                    $wire.set('codigo_pais', iti.getSelectedCountryData().dialCode);
-                });
-                " wire:ignore>
-                <x-label>
-                    Teléfono
-                    <span class="text-red-600" x-show="valor === ''">*</span>
+                <x-label class="mb-1 font-bold text-[#03192B]">
+                Teléfono
+                <span class="text-red-600" x-show="valor === ''">*</span>
                 </x-label>
+
+                <div class="flex items-center border rounded overflow-hidden">
+
+                <div class="flex items-center gap-2 px-3 bg-gray-100 border-r">
+                <img src="https://flagcdn.com/w20/gt.png" class="w-5">
+                <span class="text-gray-700 text-sm">+502</span>
+                </div>
+
                 <input
-                    id="telefono"
-                    type="text"
-                    class="border rounded px-3 py-2 w-full box-border"
-                    placeholder="Ingrese su número"
-                    x-model="valor"
-                    {{-- x-on:input="$wire.set('telefono', $event.target.value)" --}}
-                    x-on:input="
-                    valor = $event.target.value.replace(/\D/g, '').slice(0, 8);
-                    $wire.set('telefono', valor);
-                    "
-                    maxlength="8"
+                type="text"
+                maxlength="8"
+                placeholder="Ingrese su número"
+                class="px-3 py-2 w-full outline-none"
+                x-model="valor"
+                x-on:input="
+                valor = $event.target.value.replace(/\D/g,'').slice(0,8);
+                $event.target.value = valor;
+                $wire.set('telefono', valor);
+                "
                 />
-            </div>
+
+                </div>
+
+                </div>
+
 
 
             <div x-data="{ valor: ''}" x-on:form-reset.window="valor = ''">
@@ -536,8 +535,8 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
 
     <div x-show="paso === 2">
 
-       
-       
+
+
 
         <div x-data="{ valor: '' }">
 
@@ -569,23 +568,23 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
    @if ($tramites->firstWhere('id', $tramite_id)?->slug
                 !== 'tramites-legales-en-materia-penal-si-una-persona-se-encuentra-privada-de-libertad')
 
-           
+
      <!-- TITULO -->
 
                     @if($tramite_id && $tramites->firstWhere('id', $tramite_id)?->slug === 'magisterio')
-                    <div class="mt-4 p-4" 
-                    x-data="{ 
+                    <div class="mt-4 p-4"
+                    x-data="{
                     valor: ''}"
                     x-on:form-reset.window="
-                    valor = ''                    
+                    valor = ''
                     "
                     >
                     <label class="mb-2 font-bold">
- 
+
                        <div class="flex justify-center items-center gap-2 mb-2">
                             <h2 class="text-[#03192B] text-[18px]  font-semibold">
                                 Describa su título
-                            </h2>                        
+                            </h2>
                             <span class="text-red-600" x-show="valor === ''">*</span>
                         </div>
 
@@ -612,7 +611,7 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                     </div>
 
                     @endif
-                    
+
 
 
                     @if($tramite_id && in_array($tramites->firstWhere('id', $tramite_id)?->slug,
@@ -621,23 +620,23 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                         'inscripcion-extemporanea-de-un-mayor-de-edad-ante-el-registro-nacional-de-las-personas',
                         'tramites-legales-en-materia-civil']))
 
-                        
-                     <div class="mt-4 p-4" 
-                                x-data="{ 
+
+                     <div class="mt-4 p-4"
+                                x-data="{
                                 valor: ''}"
                                 x-on:form-reset.window="
                                 valor = ''
-                                
+
                                 "
                                 >
                                 <div class="flex justify-center items-center gap-2 mb-2">
                                         <h2 class="text-[#03192B] text-[18px]  font-semibold">
                                             Ingrese la razón de la solicitud
-                                        </h2>        
-                                                  
+                                        </h2>
+
                                         <span class="text-red-600" x-show="valor === ''">*</span>
                                     </div>
-                              
+
                                 <x-input
                                     x-model="valor"
                                     placeholder="Ej: Solicitud de actualización de datos"
@@ -686,12 +685,12 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                 <!-- BLOQUE PARA ESCRIBIR EL TITULO -->
 
 
-                   
-                    
 
 
-                    
-                
+
+
+
+
 
 
 
@@ -804,7 +803,7 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                         === 'tramites-legales-en-materia-penal-si-una-persona-se-encuentra-privada-de-libertad'
                     )
 
-                    
+
 
                     <div
                     x-data="{
@@ -847,7 +846,7 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                         </div>
 
 
-                        
+
                         <p class="text-center mt-1 text-sm text-red-600 font-semibold" x-text="edad === 'menor' ? 'Adolescentes en conflicto con la ley penal' : (edad === 'mayor' ? 'Privados de libertad por encontrarse en un proceso penal' : '')"></p>
 
                         <!-- INGRESAR EL TITULO -->
@@ -858,21 +857,21 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
                         <div x-show="edad !== null" x-transition>
 
                             <!-- Input para escribir la razón en trámites penales -->
-                              <div class="mt-4 p-4" 
-                                x-data="{ 
+                              <div class="mt-4 p-4"
+                                x-data="{
                                 valor: ''}"
                                 x-on:form-reset.window="
                                 valor = ''
-                                
+
                                 "
                                 >
                                 <div class="flex justify-center items-center gap-2 mb-2">
                                         <h2 class="text-[#03192B] text-[18px]  font-semibold">
                                             Ingrese la razón de la solicitud
-                                        </h2>                          
+                                        </h2>
                                         <span class="text-red-600" x-show="valor === ''">*</span>
                                     </div>
-                              
+
                                 <x-input
                                     x-model="valor"
                                     wire:model.live="razon"

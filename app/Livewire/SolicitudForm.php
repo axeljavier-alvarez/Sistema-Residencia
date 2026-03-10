@@ -94,7 +94,7 @@ class SolicitudForm extends Component
 
     // variable para la edad
     public $edad = null;
-    
+
 
     // ARRAY PARA LAS FOTOS
     protected array $noAutoClearErrors = [
@@ -133,7 +133,7 @@ class SolicitudForm extends Component
 
 
         'telefono' => 'required|string|max:20',
-        'codigo_pais' => 'required',
+        // 'codigo_pais' => 'required',
         'cui' => [
             'required',
             'string',
@@ -286,7 +286,7 @@ public function updated($property)
         }
 
 
-  
+
 
        // GUARDAR CARGAS FAMILAIRES
        if($this->agregarCargas === 'si' && count($this->cargas)>0){
@@ -493,7 +493,7 @@ public function updated($property)
                     $rules['edad'] = 'required|in:menor,mayor';
                     $messages['edad.required'] = 'Debe seleccionar si es menor o mayor de edad.';
                     $messages['edad.in'] = 'La opción de edad no es válida.';
- 
+
                     $this->validate($rules, $messages);
 
 
@@ -598,7 +598,7 @@ public function updated($property)
                         }
 
                         // validacion para la razon
-                        if(in_array($slugTramite, 
+                        if(in_array($slugTramite,
                         [
                             'magisterio',
                             'solicitar-dpi-al-registro-nacional-de-las-personas',
@@ -609,7 +609,7 @@ public function updated($property)
                         ]
                         )) {
                             $rules['razon'] = 'required|string|max:255';
-                            
+
                             if($slugTramite === 'magisterio') {
                                 $messages['razon.required'] = 'Debe describir su título';
                                 $messages['razon.max'] = 'La longitud de la descripción del titulo excede los 255 caracteres';

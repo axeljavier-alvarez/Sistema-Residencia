@@ -22,7 +22,21 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
+            @auth
             @livewire('navigation-menu')
+        @endauth
+
+        @guest
+            <nav class="bg-white border-b border-gray-100 p-4 shadow-sm">
+                <div class="max-w-7xl mx-auto flex justify-between">
+                    <span class="font-bold text-gray-800">Constancia de Residencia</span>
+                    <a href="{{ route('login') }}" class="text-sm text-blue-600 underline">Iniciar Sesión</a>
+                </div>
+            </nav>
+        @endguest
+
+
+
 
             <!-- Page Heading -->
             @if (isset($header))
@@ -41,6 +55,9 @@
 
         @stack('modals')
 
+
+
         @livewireScripts
+
     </body>
 </html>
