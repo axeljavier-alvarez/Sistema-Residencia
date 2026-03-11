@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire; // Importante
 use Illuminate\Support\Facades\Route; // Importante
+use App\Models\Solicitud;
+use App\Observers\SolicitudObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
 {
+    // observer para mensajes
+    Solicitud::observe(SolicitudObserver::class);
+
     // Código dinámico para detectar la carpeta
     $baseUrl = str_replace(['/index.php', '/public/index.php'], '', request()->getBaseUrl());
 
