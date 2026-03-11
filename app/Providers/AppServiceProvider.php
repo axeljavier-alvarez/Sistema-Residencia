@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
             ->name('custom.livewire.js');
     });
 
-    // Tu config de tablas...
+    
     config(['livewire-tables.inject_core_assets' => false]);
     if (app()->environment('local')) {
         config(['livewire-tables.base_url' => $baseUrl]);

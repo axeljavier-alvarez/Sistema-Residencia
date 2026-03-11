@@ -772,8 +772,13 @@
                                                                 <template x-if="solicitud.fotos && solicitud.fotos.length > 0">
                                                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                                         <template x-for="foto in solicitud.fotos" :key="foto.id">
-                                                                            <div class="group relative aspect-video rounded-xl overflow-hidden border shadow-sm cursor-pointer" @click="$dispatch('preview-foto', { url: '/storage/' + foto.ruta })">
-                                                                                <img :src="'/storage/' + foto.ruta" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                                                                            <div class="group relative aspect-video rounded-xl overflow-hidden border shadow-sm cursor-pointer" 
+                                                                            @click="$dispatch('preview-foto', { url: '{{ asset('storage') }}/' + foto.ruta })"
+                                                                            >
+                            
+                                                                                <img 
+                                                                                :src="'{{ asset('storage') }}/' + foto.ruta"
+                                                                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
                                                                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
                                                                                     <span class="text-white text-xs font-bold uppercase tracking-widest">Ver evidencia</span>
                                                                                 </div>
