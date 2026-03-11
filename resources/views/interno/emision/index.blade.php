@@ -691,13 +691,20 @@ x-on:constancia-generada.window="
                 </div>
 
                 <template x-if="constanciaFile">
-                    <a :href="`/storage/${constanciaFile}`" download class="inline-flex items-center gap-2 text-emerald-700 font-bold text-sm hover:underline">
+                    <a 
+                        :href="'{{ asset('storage') }}/' + constanciaFile"
+                        download
+                        class="inline-flex items-center gap-2 text-emerald-700 font-bold text-sm hover:underline"
+                    >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0 0V8m0 4h4m-4 0H8m8 4H8a2 2 0 01-2-2V6a2 2 0 012-2h5l5 5v7a2 2 0 01-2 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 16v-4m0 0V8m0 4h4m-4 0H8m8 4H8a2 2 0 01-2-2V6a2 2 0 012-2h5l5 5v7a2 2 0 01-2 2z"/>
                         </svg>
+
                         Ver / Descargar constancia
                     </a>
                 </template>
+
                 <template x-if="!constanciaFile">
                     <p class="text-xs text-emerald-600 italic">Constancia generada correctamente.</p>
                 </template>
@@ -765,38 +772,42 @@ x-on:constancia-generada.window="
 
                                 <template x-for="detalle in solicitud.detalles" :key="detalle.id">
 
-                                    <div x-show="detalle.tipo === 'carga'"
+                                        <div x-show="detalle.tipo === 'carga'"
+                                            class="flex justify-between items-center text-sm border bg-white p-3 rounded-lg shadow-sm hover:border-blue-400 transition-colors mb-3 last:mb-0">
 
-                                        class="flex justify-between items-center text-sm border bg-white p-3 rounded-lg shadow-sm hover:border-blue-400 transition-colors mb-3 last:mb-0">
+                                            <div class="flex flex-col">
 
+                                                <span class="font-bold text-gray-700"
+                                                x-text="detalle.dependiente
+                                                        ? detalle.dependiente.nombres + ' ' + (detalle.dependiente.apellidos || '')
+                                                        : 'Dependiente'">
+                                                </span>
 
+                                                <span class="text-[10px] uppercase text-blue-500 font-semibold">
+                                                    Carga Familiar
+                                                </span>
 
-                                        <div class="flex flex-col">
-                                            <span class="font-bold text-gray-700"
-                                            x-text="detalle.dependiente
+                                            </div>
+
+                                            <button
+                                            @click="
+                                            documentoActual = {
+                                                path: detalle.path,
+                                                nombre: detalle.dependiente
                                                     ? detalle.dependiente.nombres + ' ' + (detalle.dependiente.apellidos || '')
-                                                    : 'Dependiente'">
-                                            </span>
+                                                    : 'Documento'
+                                            };
+                                            openDocumento = true;
+                                            "
+                                            class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
 
+                                                Ver Archivo
 
-
-                                            <span class="text-[10px] uppercase text-blue-500 font-semibold">Carga Familiar</span>
+                                            </button>
 
                                         </div>
 
-
-
-                                        <a :href="'/storage/' + detalle.path" target="_blank"
-
-                                        class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
-
-                                            Ver Archivo
-
-                                        </a>
-
-                                    </div>
-
-                                </template>
+                                    </template>
 
                             </div>
 
