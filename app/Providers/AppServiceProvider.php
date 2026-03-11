@@ -14,27 +14,25 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public function boot(): void
-    {
-        // Si tienes observers, déjalos aquí arriba
-        // \App\Models\Solicitud::observe(...);
+{
+    // Código dinámico para detectar la carpeta
+    $baseUrl = str_replace(['/index.php', '/public/index.php'], '', request()->getBaseUrl());
 
-        // --- ESTO ARREGLA EL ERROR 404 AL ESCRIBIR ---
-        Livewire::setUpdateRoute(function ($handle) {
-            return Route::post('/ConstanciaResidencia/public/livewire/update', $handle);
-        });
+    // Agregamos ->name('custom...') para evitar el choque de nombres
+    Livewire::setUpdateRoute(function ($handle) use ($baseUrl) {
+        return Route::post($baseUrl . '/livewire/update', $handle)
+            ->name('custom.livewire.update');
+    });
 
-        Livewire::setScriptRoute(function ($handle) {
-            return Route::get('/ConstanciaResidencia/public/livewire/livewire.js', $handle);
-        });
+    Livewire::setScriptRoute(function ($handle) use ($baseUrl) {
+        return Route::get($baseUrl . '/livewire/livewire.js', $handle)
+            ->name('custom.livewire.js');
+    });
 
-
-
-        // Configuración para que los assets de tablas usen la ruta correcta
-        config(['livewire-tables.inject_core_assets' => false]);
-    // Si usas Rappasoft, esto fuerza a que no busque en la raíz
+    // Tu config de tablas...
+    config(['livewire-tables.inject_core_assets' => false]);
     if (app()->environment('local')) {
-        config(['livewire-tables.base_url' => '/ConstanciaResidencia/public']);
+        config(['livewire-tables.base_url' => $baseUrl]);
     }
-
-    }
+}
 }

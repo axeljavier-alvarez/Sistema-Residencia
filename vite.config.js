@@ -3,7 +3,7 @@ import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
     // Definir ruta para buscar build
-    base: '/ConstanciaResidencia/public/build/',
+    base: './',
 
     plugins: [
         laravel({
