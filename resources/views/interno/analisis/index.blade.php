@@ -744,10 +744,12 @@
                 <template x-for="foto in solicitud.fotos" :key="foto.id">
                     <div
                         class="group relative aspect-video rounded-xl overflow-hidden border shadow-sm cursor-pointer"
-                        @click="$dispatch('preview-foto', { url: '/storage/' + foto.path })">
+                        @click="$dispatch('preview-foto', { url: '{{ asset('storage') }}/' + foto.path })"
+                        >
 
                         <img
-                            :src="'/storage/' + foto.path"
+
+                            :src="'{{ asset('storage') }}/' + foto.path"
                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                             loading="lazy"
                         >
