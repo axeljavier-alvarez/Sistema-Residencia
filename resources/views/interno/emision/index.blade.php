@@ -27,13 +27,28 @@
     constanciaFile: null,
     openEmitir: false,
     showDocs: false,
-        descripcion: '',
+        
+    descripcion: '',
+
+    // para imagen
+    openPreview: false,
+    imgSource: '',
+
+    // para documentos
+    openDocumento: false,
+    documentoActual: null,
+
+
     hasTipo(tipo) {
             return this.solicitud?.detalles?.some(d => d.tipo === tipo);
         }
 
 }"
 
+x-on:preview-foto.window="
+    imgSource = $event.detail.url;
+    openPreview = true;
+"
 
 x-on:constancia-generada.window="
     constanciaGenerada = true;
@@ -88,6 +103,102 @@ x-on:constancia-generada.window="
     role="dialog"
     aria-modal="true"
 >
+
+
+<!-- MODAL PARA ABRIR DOCUMENTO -->
+<div x-show="openDocumento" x-cloak class="fixed inset-0 z-[999] flex items-center justify-center">
+
+
+    <div class="fixed inset-0 bg-black bg-opacity-50" @click="openDocumento = false">
+
+    </div>
+
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl p-4 relative">
+      <!-- ENCABEZADO DEL MODAL -->
+      <div class="flex items-center justify-between border-b pb-2 mb-3">
+        <h3 class="font-bold text-lg text-gray-800" x-text="documentoActual?.nombre">
+        </h3>
+
+        <div class="flex items-center gap-2">
+
+          <template x-if="documentoActual && documentoActual.path">
+
+
+             <a 
+             :href="'{{ asset('storage') }}/' + documentoActual.path"
+              target="_blank"
+              class="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
+              title="Abrir en pestaña nueva">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+
+          </template>
+
+          <button @click="openDocumento = false" class="p-2 text-red-500 hover:bg-red-50 rounded-full">✕</button>
+    </div>
+
+      </div>
+
+      <!-- donde se vera el documento -->
+      <div class="h-[70vh] border rounded-lg overflow-hidden">
+
+        <!-- ver el pdf -->
+            <template x-if="documentoActual?.path && documentoActual.path.endsWith('.pdf')">
+                <iframe
+
+                    :src="'{{ asset('storage') }}/' + documentoActual.path"                    
+                    class="w-full h-full"
+                ></iframe>
+            </template>
+
+
+        <!--donde se vera la imagen -->
+        <template x-if="documentoActual?.path && !documentoActual.path.endsWith('.pdf')">
+        <img
+            :src="'{{ asset('storage') }}/' + documentoActual.path"
+            class="w-full h-full object-contain"
+            />
+        </template>
+      </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+<!-- MODAL PARA ABRIR FOTO EN GRANDE -->
+<div x-show="openPreview"
+     x-cloak
+     @click="openPreview = false"
+     class="fixed inset-0 z-[200] flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-sm"
+     @keydown.escape.window="openPreview = false">
+
+    <!-- botón cerrar -->
+    <button @click="openPreview = false"
+        class="absolute top-5 right-5 text-white hover:text-red-400 transition-colors">
+        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+    </button>
+
+    <!-- IMAGEN -->
+    <template x-if="!imgSource.endsWith('.pdf')">
+        <img :src="imgSource"
+        class="max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl">
+    </template>
+
+    <!-- PDF -->
+    <template x-if="imgSource.endsWith('.pdf')">
+        <iframe :src="imgSource"
+        class="w-[90vw] h-[90vh] bg-white rounded-lg shadow-2xl"></iframe>
+    </template>
+
+</div>
 
 
 
@@ -187,6 +298,8 @@ x-on:constancia-generada.window="
         </div>
     </div>
 </div>
+
+
 
 
 <!-- MODAL DE EMITIR CONSTANCIA -->
@@ -606,12 +719,21 @@ x-on:constancia-generada.window="
                                     <span class="font-bold text-gray-700" x-text="detalle.requisito_tramite?.requisito?.nombre || 'Documento'"></span>
                                     <span class="text-[10px] uppercase text-gray-400 font-semibold" x-text="detalle.tipo"></span>
                                 </div>
-                          <a :href="'{{ asset('storage') }}/' + detalle.path" target="_blank"
-   class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
-    Ver Archivo
-</a>
+                          
 
-                    <span class="text-[8px]" x-text="'Debug Path: ' + detalle.path"></span>
+                               <button
+                                @click="
+                                documentoActual = {
+                                    path: detalle.path,
+                                    nombre: detalle.requisito_tramite?.requisito?.nombre || 'Documento'
+                                };
+                                openDocumento = true;
+                                "
+                                class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
+                                Ver Archivo
+                                </button>
+
+
 
 
                             </div>
@@ -708,43 +830,48 @@ x-on:constancia-generada.window="
 
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-4">
 
-                                    <h4 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
+                                   
+                    <h4 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
+    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+    </svg>
 
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+    Evidencias de Visita de Campo
+</h4>
 
-                                        Evidencias de Visita de Campo
+<!-- GRID IGUAL AL DE LAS OTRAS FOTOS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-                                    </h4>
+    <template x-for="detalle in solicitud.detalles" :key="detalle.id">
 
+        <div
+            x-show="detalle.tipo === 'foto_visita'"
+            class="group relative aspect-video rounded-xl overflow-hidden border shadow-sm cursor-pointer"
+            @click="$dispatch('preview-foto', { url: '{{ asset('storage') }}/' + detalle.path })"
+        >
 
+            <img
+                :src="'{{ asset('storage') }}/' + detalle.path"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                loading="lazy"
+            >
 
-                                    <template x-if="hasTipo('foto_visita')">
+            <!-- overlay hover -->
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                <span class="text-white text-xs font-bold uppercase tracking-widest">
+                    Ver evidencia
+                </span>
+            </div>
 
-                                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        </div>
 
-                                            <template x-for="detalle in solicitud.detalles" :key="detalle.id">
+    </template>
 
-                                                <div x-show="detalle.tipo === 'foto_visita'" class="group relative">
+</div>
 
-                                                    <img :src="'/storage/' + detalle.path"
-
-                                                        class="w-full h-32 object-cover rounded-lg border-2 border-white shadow-md">
-
-                                                    <a :href="'/storage/' + detalle.path" target="_blank"
-
-                                                    class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg text-white text-xs font-bold">
-
-                                                        Ampliar Foto
-
-                                                    </a>
-
-                                                </div>
-
-                                            </template>
-
-                                        </div>
-
-                                    </template>
 
 
 
