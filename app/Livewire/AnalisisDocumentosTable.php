@@ -335,20 +335,19 @@ class AnalisisDocumentosTable extends DataTableComponent
             $arrayFinal = $documentosNormales->values()->toArray();
 
             // ver los dependientes en el modal
-            $arrayFinal[] = [
-                'tipo' => 'carga',
-                'titulo' => 'Cargas familiares',
-                'dependientes' => $dependientes->toArray()
-            ];
-
-
-            // ver los dependientes en el previo
-            foreach ($dependientes as $dep) {
-                $arrayFinal[] = [
-                    'tipo' => 'carga',
-                    'titulo' => $dep['nombre'] . ' - Cargas familiares'
-                ];
+          
+            if ($dependientes->isNotEmpty()) {
+                foreach ($dependientes as $dep) {
+                    $arrayFinal[] = [
+                        'tipo' => 'carga',
+                        'titulo' => $dep['nombre'],
+                        'path' => $dep['path']
+                    ];
+                }
             }
+
+
+          
 
 
             // poder ver la bitacora

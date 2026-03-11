@@ -475,49 +475,51 @@
                                     Personas Dependientes
                                 </h4>
 
+                                
+
                                 <div class="flex flex-wrap gap-2">
-                                    <template x-if="solicitud.documentos && solicitud.documentos.find(d => d.tipo === 'carga')">
-                                        <div class="flex flex-wrap gap-2">
 
-                                            <template x-for="dep in solicitud.documentos.find(d => d.tipo === 'carga').dependientes" :key="dep.id">
+                                        <template 
+                                            x-for="dep in (solicitud.documentos || []).filter(d => d.tipo === 'carga')" 
+                                            :key="dep.id"
+                                        >
 
-                                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 border border-gray-700 hover:border-green-500/40 transition-all">
+                                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 border border-gray-700 hover:border-green-500/40 transition-all">
 
-                                                    <!-- NOMBRE -->
-                                                    <span class="text-gray-300 text-xs" x-text="dep.nombre"></span>
+                                                <!-- NOMBRE -->
+                                                <span class="text-gray-300 text-xs" x-text="dep.titulo"></span>
 
-                                                    <!-- VER -->
-                                                    <button 
-                                                        @click="documentoActual = dep; openDocumento = true;"
-                                                        class="text-gray-400 hover:text-blue-400 transition"
-                                                        title="Ver documento">
-                                                        <i class="fas fa-eye text-[11px]"></i>
-                                                    </button>
+                                                <!-- VER -->
+                                                <button 
+                                                    @click="documentoActual = dep; openDocumento = true;"
+                                                    class="text-gray-400 hover:text-blue-400 transition"
+                                                    title="Ver documento">
+                                                    <i class="fas fa-eye text-[11px]"></i>
+                                                </button>
 
-                                                    <!-- DESCARGAR -->
-                                                    <a                                                                                                 
+                                                <!-- DESCARGAR -->
+                                                <a 
+                                                    :href="'{{ asset('storage') }}/' + dep.path" 
+                                                    :download="dep.titulo"
+                                                    @click.stop
+                                                    class="text-gray-400 hover:text-emerald-400 transition"
+                                                    title="Descargar documento">
+                                                    <i class="fas fa-download text-[11px]"></i>
+                                                </a>
 
-                                                        :href="'{{ asset('storage') }}/' + dep.path" 
-                                                        :download="dep.nombre"
-                                                        @click.stop
-                                                        class="text-gray-400 hover:text-emerald-400 transition"
-                                                        title="Descargar documento">
-                                                        <i class="fas fa-download text-[11px]"></i>
-                                                    </a>
+                                            </div>
 
-                                                </div>
+                                        </template>
 
-                                            </template>
+                                        <!-- SI NO HAY DEPENDIENTES -->
+                                        <template x-if="(solicitud.documentos || []).filter(d => d.tipo === 'carga').length === 0">
+                                            <span class="text-[11px] text-orange-400/80 italic flex items-center gap-1.5">
+                                                <i class="fas fa-info-circle"></i> No se ingresaron dependientes
+                                            </span>
+                                        </template>
 
-                                            <template x-if="solicitud.documentos.find(d => d.tipo === 'carga').dependientes.length === 0">
-                                                <span class="text-[11px] text-orange-400/80 italic flex items-center gap-1.5">
-                                                    <i class="fas fa-info-circle"></i> No se ingresaron dependientes
-                                                </span>
-                                            </template>
+                                    </div>
 
-                                        </div>
-                                    </template>
-                                </div>
                             </div>
 
 
