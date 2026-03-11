@@ -453,7 +453,7 @@ public function updated($property)
 
                         'telefono' => $this->reglasTelefonoPorPais(),
 
-                        'codigo_pais' => 'required',
+                        // 'codigo_pais' => 'required',
                         'cui' => [
                             'required',
                             'string',

@@ -269,7 +269,9 @@
           <template x-if="documentoActual && documentoActual.path">
 
 
-             <a :href="`/storage/${documentoActual.path}`" target="_blank"
+             <a 
+             :href="'{{ asset('storage') }}/' + documentoActual.path"
+              target="_blank"
               class="p-2 text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
               title="Abrir en pestaña nueva">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
@@ -288,7 +290,8 @@
         <!-- ver el pdf -->
             <template x-if="documentoActual?.path && documentoActual.path.endsWith('.pdf')">
                 <iframe
-                    :src="`/storage/${documentoActual.path}`"
+
+                    :src="'{{ asset('storage') }}/' + documentoActual.path"                    
                     class="w-full h-full"
                 ></iframe>
             </template>
@@ -297,7 +300,7 @@
         <!--donde se vera la imagen -->
         <template x-if="documentoActual?.path && !documentoActual.path.endsWith('.pdf')">
         <img
-            :src="`/storage/${documentoActual.path}`"
+            :src="'{{ asset('storage') }}/' + documentoActual.path"
             class="w-full h-full object-contain"
             />
         </template>
@@ -492,8 +495,9 @@
                                                     </button>
 
                                                     <!-- DESCARGAR -->
-                                                    <a 
-                                                        :href="'/storage/' + dep.path"
+                                                    <a                                                                                                 
+
+                                                        :href="'{{ asset('storage') }}/' + dep.path" 
                                                         :download="dep.nombre"
                                                         @click.stop
                                                         class="text-gray-400 hover:text-emerald-400 transition"
@@ -565,7 +569,7 @@
 
                     <!-- BOTON DESCARGAR -->
                     <a 
-                        :href="'/storage/' + doc.path"
+                        :href="'{{ asset('storage') }}/' + doc.path" target="_blank"
                         :download="doc.titulo"
                         @click.stop
                         class="ml-2 p-2 bg-emerald-100 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition"

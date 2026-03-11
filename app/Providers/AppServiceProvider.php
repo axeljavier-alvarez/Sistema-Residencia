@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
     // Código dinámico para detectar la carpeta
     $baseUrl = str_replace(['/index.php', '/public/index.php'], '', request()->getBaseUrl());
 
+    \Illuminate\Support\Facades\URL::forceRootUrl(config('app.url'));
+    
     // Agregamos ->name('custom...') para evitar el choque de nombres
     Livewire::setUpdateRoute(function ($handle) use ($baseUrl) {
         return Route::post($baseUrl . '/livewire/update', $handle)

@@ -610,6 +610,10 @@ x-on:constancia-generada.window="
    class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-bold hover:bg-blue-700 transition-colors">
     Ver Archivo
 </a>
+
+                    <span class="text-[8px]" x-text="'Debug Path: ' + detalle.path"></span>
+
+
                             </div>
                         </template>
                     </div>
