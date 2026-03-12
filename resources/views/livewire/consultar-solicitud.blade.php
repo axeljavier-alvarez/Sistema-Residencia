@@ -1,7 +1,7 @@
 <div
     x-data="{ openModal: false }"
     x-effect="if (@js($solicitud)) { openModal = true }"
-    class="px-4 py-12 -mt-5 bg-[#F3F4F6] min-h-screen font-sans"
+    class="px-4 py-12 -mt-5 min-h-screen font-sans"
 >
 
     {{-- CONTENEDOR PRINCIPAL --}}

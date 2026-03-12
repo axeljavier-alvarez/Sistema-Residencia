@@ -22,7 +22,7 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @auth
+            {{-- @auth
             @livewire('navigation-menu')
         @endauth
 
@@ -33,7 +33,7 @@
                     <a href="{{ route('login') }}" class="text-sm text-blue-600 underline">Iniciar Sesión</a>
                 </div>
             </nav>
-        @endguest
+        @endguest --}}
 
 
 

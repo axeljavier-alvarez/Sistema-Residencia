@@ -12,8 +12,7 @@ export default defineConfig({
         }),
     ],
 
-    // 2. OPCIONAL: Si sigues teniendo problemas con fuentes o imágenes,
-    // ayuda a Vite a resolver las rutas relativas.
+    
     resolve: {
         alias: {
             '@': '/resources/js',

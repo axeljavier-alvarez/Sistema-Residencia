@@ -3,15 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SolicitudController;
 
+// MENU
 Route::get('/', function () {
-    return view('welcome');
+    return view('menu'); 
 });
-
-
-// IR A LA RUTA DE FORMULARIO DE SOLICITUD
-// Route::get('/solicitudes', function(){
-//     return view('solicitudes.create');
-// })->name('solicitudes.create');
 
 
 
@@ -41,7 +36,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
+    // Cambiamos '/dashboard' por '/interno/dashboard'
+    Route::get('/interno/dashboard', function () {
         return view('dashboard');
-    })->name('dashboard');
+    })->name('dashboard'); 
 });
