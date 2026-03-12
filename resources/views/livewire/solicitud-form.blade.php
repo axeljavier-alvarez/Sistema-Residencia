@@ -436,9 +436,16 @@ class="max-w-4xl mx-auto my-20 bg-white border rounded-xl p-8 shadow-[0_0_10px_#
 
                 <div class="flex items-center border rounded overflow-hidden">
 
-                <div class="flex items-center gap-2 px-3 bg-gray-100 border-r">
-                <img src="https://flagcdn.com/w20/gt.png" class="w-5">
-                <span class="text-gray-700 text-sm">+502</span>
+               <div class="flex items-center gap-2 px-3 bg-gray-50 border-r border-gray-300 h-full py-2">
+                    <img 
+                        src="{{ asset('imagenes/bandera-guate.png') }}" 
+                        alt="Guatemala" 
+                        class="w-6 h-auto object-contain rounded-sm shadow-sm"
+                    >
+                    
+                    <span class="text-gray-700 text-sm font-semibold tracking-wide">
+                        +502
+                    </span>
                 </div>
 
                 <input
